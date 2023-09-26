@@ -1,0 +1,22 @@
+{
+  "name": "md-master-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "compile": "tsc",
+    "start": "npm run compile && node ./dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@apollo/server": "^4.9.3",
+    "@prisma/client": "5.3.1",
+    "graphql": "^16.8.0"
+  },
+  "devDependencies": {
+    "prisma": "^5.3.1"
+  }
+}
