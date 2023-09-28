@@ -1,19 +1,41 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// This is your Prisma schema file, which defines your database schema and relationships.
+// Learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// Define the data source for your application, which connects to a MySQL database.
 datasource db {
   provider     = "mysql"
   url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
+// Define the Prisma generator for generating the Prisma Client.
 generator client {
   provider = "prisma-client-js"
 }
 
+// Define the User model for representing user-related data.
 model User {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  name      String   @db.VarChar(255)
-  nickname  String   @db.VarChar(255)
+  user_id         String   @id @default(cuid())
+  created_at      DateTime @default(now())
+  offcial_name    String   @db.VarChar(255)
+  display_name    String   @db.VarChar(255)
+  email           String   @unique
+  email_verified  Boolean  @default(false)
+  profile_picture String?
+
+  // Define the relationship to Markdown_Documents.
+  markdown_documents Markdown_Documents[] // A user can have multiple markdown documents.
+}
+
+// Define the Markdown_Documents model for representing markdown documents.
+model Markdown_Documents {
+  document_id         String   @id @default(cuid())
+  title               String   @db.VarChar(255)
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+  elasticsearch_index String
+
+  // Define the relationship to the User who created the document.
+  user    User   @relation(fields: [user_id], references: [user_id])
+  user_id String @unique
 }
