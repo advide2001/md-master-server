@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "compile": "tsc",
-    "start": "npm run compile && node ./dist/index.js"
+    "start": "npm run compile && node ./dist/index.js",
+    "postgresql:migrate": "npm prisma migrate dev",
+    "mongo:generate": "npx prisma generate --schema prisma-mongo/schema.prisma",
+    "mongo:dbpush": "npx prisma db push --schema prisma-mongo/schema.prisma"
   },
   "keywords": [],
   "author": "",
@@ -14,7 +17,8 @@
   "dependencies": {
     "@apollo/server": "^4.9.3",
     "@prisma/client": "5.3.1",
-    "graphql": "^16.8.0"
+    "graphql": "^16.8.0",
+    "mongodb": "^6.1.0"
   },
   "devDependencies": {
     "prisma": "^5.3.1"
