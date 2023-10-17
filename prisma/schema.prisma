@@ -12,13 +12,13 @@ datasource db {
 
 // Define the User model for representing user-related data.
 model User {
-  user_id         String   @id @default(cuid())
-  created_at      DateTime @default(now())
-  offcial_name    String   @db.VarChar(255)
-  display_name    String   @db.VarChar(255)
-  email           String   @unique
-  email_verified  Boolean  @default(false)
-  profile_picture String?
+  user_id        String   @id @default(cuid())
+  created_at     DateTime @default(now())
+  official_name  String
+  display_name   String
+  email          String   @unique
+  email_verified Boolean  @default(false)
+  avatar_url     String?
 
   // Define the relationship to Markdown_Documents.
   markdown_documents Markdown_Documents[] // A user can have multiple markdown documents.
@@ -27,7 +27,7 @@ model User {
 // Define the Markdown_Documents model for representing markdown documents.
 model Markdown_Documents {
   document_id       String   @id @default(cuid())
-  title             String   @db.VarChar(255)
+  title             String
   created_at        DateTime @default(now())
   updated_at        DateTime @updatedAt
   // field for referencing the MongoDB document by ID
