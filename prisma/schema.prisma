@@ -26,13 +26,13 @@ model User {
 
 // Define the Markdown_Documents model for representing markdown documents.
 model Markdown_Documents {
-  document_id     String   @id @default(cuid())
-  title           String   @db.VarChar(255)
-  created_at      DateTime @default(now())
-  updated_at      DateTime @updatedAt
+  document_id       String   @id @default(cuid())
+  title             String   @db.VarChar(255)
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
   // field for referencing the MongoDB document by ID
-  mongoDocumentId String?
+  mongo_document_id String?
   // Define the relationship to the User who created the document.
-  author          User     @relation(fields: [author_id], references: [user_id])
-  author_id       String
+  author            User     @relation(fields: [author_id], references: [user_id])
+  author_id         String
 }
