@@ -31,7 +31,7 @@ model Markdown_Documents {
   created_at        DateTime @default(now())
   updated_at        DateTime @updatedAt
   // field for referencing the MongoDB document by ID
-  mongo_document_id String?
+  mongo_document_id String
   // Define the relationship to the User who created the document.
   author            User     @relation(fields: [author_id], references: [user_id])
   author_id         String
