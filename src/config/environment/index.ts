@@ -11,4 +11,6 @@ const env = {
   production: process.env.NODE_ENV === 'production'
 };
 
-export { port, env };
+const mongoDBUri = <string>process.env.DATABASE_URL_MONGODB;
+
+export { port, env, mongoDBUri };
