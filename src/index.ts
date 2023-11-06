@@ -1,12 +1,19 @@
 import { port } from './config/environment';
 import app from './app';
+import { serverStartMessage, serverFailMessage } from './constants';
+import { connectToMongoDB } from './utils/db';
+import log from './utils/logger';
+import routes from './routes';
 
 const start = async () => {
   try {
-    app.listen(port);
-    console.log(`server running on port ${port}...`);
+    app.listen(port, async () => {
+      await connectToMongoDB();
+      routes(app);
+    });
+    log.info(serverStartMessage + port);
   } catch {
-    console.log('server not failed to start!');
+    log.info(serverFailMessage);
   }
 };
 
