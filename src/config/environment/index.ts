@@ -12,5 +12,6 @@ const env = {
 };
 
 const mongoDBUri = <string>process.env.DATABASE_URL_MONGODB;
+const postgresqlDBUri = <string>process.env.DATABASE_URL_POSTGRESQL;
 
-export { port, env, mongoDBUri };
+export { port, env, mongoDBUri, postgresqlDBUri };
