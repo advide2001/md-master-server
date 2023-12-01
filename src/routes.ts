@@ -1,12 +1,20 @@
 import { Express, Request, Response } from 'express';
+import { MarkdownContentWithId } from './types/database';
+import { markdownContent } from './utils/db';
 
 function routes(app: Express) {
-  app.get('/healthcheck', (req: Request, res: Response) => {
-    res.sendStatus(200);
-  });
+  // temp route to check mongo db connection
+  app.get(
+    '/documents',
+    async (req: Request, res: Response<MarkdownContentWithId[]>) => {
+      const results = markdownContent.find();
+      const markdownDocuments = await results.toArray();
+      res.json(markdownDocuments);
+    }
+  );
 
-  // user info routes
-  app.get('/user', (req: Request, res: Response) => {
+  // temp route to check postgres db connection
+  app.get('/user', async (req: Request, res: Response) => {
     res.sendStatus(200);
   });
 
@@ -22,8 +30,8 @@ function routes(app: Express) {
     res.sendStatus(200);
   });
 
-  // route to get all documents
-  app.get('/documents', (req: Request, res: Response) => {
+  // route to check if the server is repsonding to requests
+  app.get('/healthcheck', (req: Request, res: Response) => {
     res.sendStatus(200);
   });
 }
