@@ -1,14 +1,9 @@
-import mongoose from 'mongoose';
+import { MongoClient } from 'mongodb';
 import { mongoDBUri } from '../../config/environment';
+import { MarkdownContent } from '../../types/database';
 
-async function connectToMongoDB() {
-  try {
-    await mongoose.connect(mongoDBUri);
-    console.log('Connected to MongoDB');
-  } catch (error) {
-    console.log('Failed to connect to Mongo DB');
-    process.exit(1);
-  }
-}
+export const mongoClient = new MongoClient(mongoDBUri);
+export const mongoDBInstance = mongoClient.db();
 
-export { connectToMongoDB };
+export const markdownContent =
+  mongoDBInstance.collection<MarkdownContent>('markdown-content');
