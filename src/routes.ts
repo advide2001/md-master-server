@@ -1,6 +1,7 @@
 import { Express, Request, Response } from 'express';
 import { MarkdownContentWithId } from './types/database';
 import { markdownContent } from './utils/db';
+import { getUsers } from './handlers/users';
 
 function routes(app: Express) {
   // temp route to check mongo db connection
@@ -14,9 +15,7 @@ function routes(app: Express) {
   );
 
   // temp route to check postgres db connection
-  app.get('/user', async (req: Request, res: Response) => {
-    res.sendStatus(200);
-  });
+  app.get('/user', getUsers);
 
   app.post('/user', (req: Request, res: Response) => {
     res.sendStatus(200);
