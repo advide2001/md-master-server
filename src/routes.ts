@@ -1,35 +1,24 @@
 import { Express, Request, Response } from 'express';
-import { MarkdownContentWithId } from './types/database';
-import { markdownContent } from './utils/db';
-import { getUsers } from './handlers/users';
+import {
+  getUser,
+  getUserById,
+  createUser,
+  updateUser,
+  deleteUser
+} from './handlers/user';
 
 function routes(app: Express) {
-  // temp route to check mongo db connection
-  app.get(
-    '/documents',
-    async (req: Request, res: Response<MarkdownContentWithId[]>) => {
-      const results = markdownContent.find();
-      const markdownDocuments = await results.toArray();
-      res.json(markdownDocuments);
-    }
-  );
+  app.get('/user', getUser);
 
-  // temp route to check postgres db connection
-  app.get('/user', getUsers);
+  app.get('/user/:id', getUserById);
 
-  app.post('/user', (req: Request, res: Response) => {
-    res.sendStatus(200);
-  });
+  app.post('/user', createUser);
 
-  app.patch('/user', (req: Request, res: Response) => {
-    res.sendStatus(200);
-  });
+  app.patch('/user', updateUser);
 
-  app.delete('/user', (req: Request, res: Response) => {
-    res.sendStatus(200);
-  });
+  app.delete('/user', deleteUser);
 
-  // route to check if the server is repsonding to requests
+  // route to check if the server is repsonding to requests.
   app.get('/healthcheck', (req: Request, res: Response) => {
     res.sendStatus(200);
   });
