@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import cors from 'cors';
 import { rateLimit } from 'express-rate-limit';
+import bodyParser from 'body-parser';
 
 const app = express();
 
@@ -11,6 +12,9 @@ app.use(helmet());
 // Allows request from any origin.
 // For production, this should be configured to allow request from only white listed IPs
 app.use(cors());
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
