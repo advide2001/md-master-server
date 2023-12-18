@@ -1,7 +1,7 @@
 {
   "name": "md-master-server",
   "version": "1.0.0",
-  "description": "",
+  "description": "Revolutionizing Markdown: A User-Friendly, Collaborative Online Markdown Editor",
   "main": "index.js",
   "scripts": {
     "dev": "npx nodemon",
