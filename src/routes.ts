@@ -14,11 +14,13 @@ function routes(app: Express) {
 
   app.get('/user/:id', ClerkExpressRequireAuth(), getUserById);
 
+  // clerk webhook routes, write middlware to deny access to anyone else
+
   app.post('/user', createUser);
 
   app.patch('/user', updateUser);
 
-  app.delete('/user', ClerkExpressRequireAuth(), deleteUser);
+  app.delete('/user', deleteUser);
 
   // route to check if the server is repsonding to requests.
   app.get('/healthcheck', (req: Request, res: Response) => {
