@@ -13,5 +13,6 @@ const env = {
 
 const mongoDBUri = <string>process.env.DATABASE_URL_MONGODB;
 const postgresqlDBUri = <string>process.env.DATABASE_URL_POSTGRESQL;
+const clerkSecretKey = <string>process.env.CLERK_SECRET_KEY;
 
-export { port, env, mongoDBUri, postgresqlDBUri };
+export { port, env, mongoDBUri, postgresqlDBUri, clerkSecretKey };
