@@ -7,16 +7,18 @@ import {
   deleteUser
 } from './handlers/user';
 
-function routes(app: Express) {
-  app.get('/user', getUser);
+import { ClerkExpressRequireAuth } from '@clerk/clerk-sdk-node';
 
-  app.get('/user/:id', getUserById);
+function routes(app: Express) {
+  app.get('/user', ClerkExpressRequireAuth(), getUser);
+
+  app.get('/user/:id', ClerkExpressRequireAuth(), getUserById);
 
   app.post('/user', createUser);
 
   app.patch('/user', updateUser);
 
-  app.delete('/user', deleteUser);
+  app.delete('/user', ClerkExpressRequireAuth(), deleteUser);
 
   // route to check if the server is repsonding to requests.
   app.get('/healthcheck', (req: Request, res: Response) => {
