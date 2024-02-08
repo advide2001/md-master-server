@@ -1,4 +1,5 @@
 import { Express, Request, Response } from 'express';
+import { env } from './config/environment';
 import {
   getUser,
   getUserById,
@@ -15,15 +16,30 @@ function routes(app: Express) {
   app.get('/user/:id', ClerkExpressRequireAuth(), getUserById);
 
   // clerk webhook routes, write middlware to deny access to anyone else
-
   app.post('/user', createUser);
 
   app.patch('/user', updateUser);
 
   app.delete('/user', deleteUser);
 
-  // route to check if the server is repsonding to requests.
-  app.get('/healthcheck', (req: Request, res: Response) => {
+  // routes to check if the server is repsonding to requests.
+  app.get('/servercheck', (req: Request, res: Response) => {
+    if (!env.development) res.sendStatus(404);
+    else res.sendStatus(200);
+  });
+
+  app.get(
+    '/authcheck',
+    ClerkExpressRequireAuth(),
+    (req: Request, res: Response) => {
+      if (!env.development) res.sendStatus(404);
+      console.log(req.headers);
+      res.sendStatus(200);
+    }
+  );
+
+  app.get('/dbcheck', (req: Request, res: Response) => {
+    if (!env.development) res.sendStatus(404);
     res.sendStatus(200);
   });
 }

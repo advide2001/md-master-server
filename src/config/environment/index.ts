@@ -5,7 +5,7 @@ dotenv.config();
 const port = process.env.PORT;
 
 const env = {
-  development: process.env.NODE_ENV === 'development',
+  development: process.env.NODE_ENV === 'DEV',
   test: process.env.NODE_ENV === 'test',
   staging: process.env.NODE_ENV == 'staging',
   production: process.env.NODE_ENV === 'production'
