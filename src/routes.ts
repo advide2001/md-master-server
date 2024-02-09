@@ -25,7 +25,7 @@ function routes(app: Express) {
   // routes to check if the server is repsonding to requests.
   app.get('/servercheck', (req: Request, res: Response) => {
     if (!env.development) res.sendStatus(404);
-    else res.sendStatus(200);
+    res.json({ status: 'SERVER OK' });
   });
 
   app.get(
@@ -33,14 +33,13 @@ function routes(app: Express) {
     ClerkExpressRequireAuth(),
     (req: Request, res: Response) => {
       if (!env.development) res.sendStatus(404);
-      console.log(req.headers);
-      res.sendStatus(200);
+      res.json({ status: 'AUTH OK' });
     }
   );
 
   app.get('/dbcheck', (req: Request, res: Response) => {
-    if (!env.development) res.sendStatus(404);
-    res.sendStatus(200);
+    if (env.development) res.sendStatus(404);
+    res.json({ status: 'DB OK' });
   });
 }
 
