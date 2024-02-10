@@ -9,6 +9,7 @@ import {
 } from './handlers/user';
 
 import { ClerkExpressRequireAuth } from '@clerk/clerk-sdk-node';
+import { PrismaClient } from '@prisma/client';
 
 function routes(app: Express) {
   app.get('/user', ClerkExpressRequireAuth(), getUser);
@@ -37,10 +38,24 @@ function routes(app: Express) {
     }
   );
 
-  app.get('/dbcheck', (req: Request, res: Response) => {
-    if (env.development) res.sendStatus(404);
-    res.json({ status: 'DB OK' });
-  });
+  app.get(
+    '/dbcheck',
+    ClerkExpressRequireAuth(),
+    async (req: Request, res: Response) => {
+      if (!env.development) res.sendStatus(404);
+      const prisma = new PrismaClient();
+
+      try {
+        await prisma.$connect();
+        res.json({ status: 'DB OK' });
+      } catch (error) {
+        console.error('Error connecting to the database: ' + error);
+        res.json({ status: `DB Connection Error: ${error}` });
+      } finally {
+        await prisma.$disconnect();
+      }
+    }
+  );
 }
 
 export default routes;
