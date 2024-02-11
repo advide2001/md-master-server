@@ -41,6 +41,7 @@
     "pino": "^8.16.1",
     "react-router-dom": "^6.21.1",
     "sort-by": "^1.2.0",
+    "svix": "^1.17.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
