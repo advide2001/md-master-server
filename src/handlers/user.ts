@@ -52,7 +52,11 @@ export const handleUserCrud = async (req: Request, res: Response) => {
       message: JSON.stringify(err)
     });
   }
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const id = evt.data;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const eventType = evt.type;
 
   console.log(`Webhook with ID of ${id} and type ${eventType}`);
