@@ -23,6 +23,12 @@ export const handleUserCrud = async (req: Request, res: Response) => {
   const headers = req.headers;
   const payload = req.body;
 
+  console.log(payload);
+  console.log(typeof payload);
+  const parsedPayload = JSON.parse(payload.toString());
+  console.log(parsedPayload);
+  console.log(typeof parsedPayload);
+
   // get the svix headers for verification
   const svixId = headers['svix-id'] as string;
   const svixTimestamp = headers['svix-timestamp'] as string;
@@ -35,32 +41,25 @@ export const handleUserCrud = async (req: Request, res: Response) => {
 
   // initialize svix
   const wh = new Webhook(clerkWebhookSigningKey);
-  let evt;
+  let evt: string;
 
   // attempt to veify the incoming webhook request
   try {
-    evt = wh.verify(payload, {
+    evt = wh.verify(parsedPayload, {
       'svix-id': svixId,
       'svix-timestamp': svixTimestamp,
       'svix-signature': svixSignature
-    });
+    }) as string;
   } catch (err) {
-    // console log and returen the error
+    // console log and return the error
     console.log('Webhook Verification Failed. Error: ' + err);
     return res.status(400).json({
       success: false,
       message: JSON.stringify(err)
     });
   }
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const id = evt.data;
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const eventType = evt.type;
 
-  console.log(`Webhook with ID of ${id} and type ${eventType}`);
-  console.log(`Webhook body: ${JSON.stringify(payload)}`);
+  console.log(evt);
 
   return res.status(200).json({
     success: true,
