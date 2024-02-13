@@ -38,7 +38,7 @@ export const handleUserCrud = async (req: Request, res: Response) => {
 
   // initialize svix
   const wh = new Webhook(clerkWebhookSigningKey);
-  let evt: string;
+  let evt;
 
   // attempt to veify the incoming webhook request
   try {
@@ -46,7 +46,7 @@ export const handleUserCrud = async (req: Request, res: Response) => {
       'svix-id': svixId,
       'svix-timestamp': svixTimestamp,
       'svix-signature': svixSignature
-    }) as string;
+    });
   } catch (err) {
     // console log and return the error
     console.log('Webhook Verification Failed. Error: ' + err);
@@ -57,6 +57,7 @@ export const handleUserCrud = async (req: Request, res: Response) => {
   }
 
   console.log(evt);
+  console.log(typeof evt);
 
   return res.status(200).json({
     success: true,
