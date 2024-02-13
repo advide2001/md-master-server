@@ -23,9 +23,6 @@ export const handleUserCrud = async (req: Request, res: Response) => {
   const headers = req.headers;
   const payload = JSON.stringify(req.body);
 
-  console.log(payload);
-  console.log(typeof payload);
-
   // get the svix headers for verification
   const svixId = headers['svix-id'] as string;
   const svixTimestamp = headers['svix-timestamp'] as string;
@@ -56,8 +53,8 @@ export const handleUserCrud = async (req: Request, res: Response) => {
     });
   }
 
-  console.log(evt);
-  console.log(typeof evt);
+  console.log('Webhook Verification Success' + JSON.stringify(evt));
+  // do something with evt depending on the type of the event
 
   return res.status(200).json({
     success: true,
