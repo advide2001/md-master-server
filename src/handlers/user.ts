@@ -21,13 +21,10 @@ export const handleUserCrud = async (req: Request, res: Response) => {
 
   // grab the headers and the body from the request
   const headers = req.headers;
-  const payload = req.body;
+  const payload = JSON.stringify(req.body);
 
   console.log(payload);
   console.log(typeof payload);
-  const parsedPayload = JSON.parse(payload.toString());
-  console.log(parsedPayload);
-  console.log(typeof parsedPayload);
 
   // get the svix headers for verification
   const svixId = headers['svix-id'] as string;
@@ -45,7 +42,7 @@ export const handleUserCrud = async (req: Request, res: Response) => {
 
   // attempt to veify the incoming webhook request
   try {
-    evt = wh.verify(parsedPayload, {
+    evt = wh.verify(payload, {
       'svix-id': svixId,
       'svix-timestamp': svixTimestamp,
       'svix-signature': svixSignature
