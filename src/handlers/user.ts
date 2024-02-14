@@ -2,6 +2,11 @@ import { Request, Response } from 'express';
 import { primaryDatabase } from '../utils/db';
 import { clerkWebhookSigningKey } from '../config/environment';
 import { Webhook } from 'svix';
+import {
+  UserCreatedWebhook,
+  UserDeletedWebhook,
+  UserUpdatedWebhook
+} from '../models/user';
 
 export const getUser = async (req: Request, res: Response) => {
   res.sendStatus(200);
@@ -35,7 +40,7 @@ export const handleUserCrud = async (req: Request, res: Response) => {
 
   // initialize svix
   const wh = new Webhook(clerkWebhookSigningKey);
-  let evt;
+  let evt: UserCreatedWebhook | UserUpdatedWebhook | UserDeletedWebhook;
 
   // attempt to veify the incoming webhook request
   try {
@@ -43,7 +48,7 @@ export const handleUserCrud = async (req: Request, res: Response) => {
       'svix-id': svixId,
       'svix-timestamp': svixTimestamp,
       'svix-signature': svixSignature
-    });
+    }) as UserCreatedWebhook | UserUpdatedWebhook | UserDeletedWebhook;
   } catch (err) {
     // console log and return the error
     console.log('Webhook Verification Failed. Error: ' + err);
@@ -53,8 +58,13 @@ export const handleUserCrud = async (req: Request, res: Response) => {
     });
   }
 
-  console.log('Webhook Verification Success' + JSON.stringify(evt));
+  // Grab the ID and TYPE of the Webhook
+  const { id } = evt.data;
+  const eventType = evt.type;
+
   // do something with evt depending on the type of the event
+  console.log(`Webhook with an ID of ${id} and type of ${eventType}`);
+  console.log('Webhook body:', evt.data);
 
   return res.status(200).json({
     success: true,
