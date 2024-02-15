@@ -12,27 +12,50 @@ datasource db {
 
 // Define the User model for representing user-related data.
 model User {
-  user_id        String   @id @default(cuid())
-  created_at     DateTime @default(now())
-  official_name  String
-  display_name   String
-  email          String   @unique
-  email_verified Boolean  @default(false)
-  avatar_url     String?
+  userId        String   @id @default(cuid())
+  clerkID       String   @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  officialName  String
+  displayName   String
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  avatarUrl     String?
 
-  // Define the relationship to Markdown_Documents.
-  markdown_documents Markdown_Documents[] // A user can have multiple markdown documents.
+  // Define the relationship to Project
+  projects Project[] // A user can have multiple projects.
+
+  // Define an index for faster querying
+  @@index([userId])
+  @@index([clerkID])
 }
 
-// Define the Markdown_Documents model for representing markdown documents.
-model Markdown_Documents {
-  document_id       String   @id @default(cuid())
-  title             String
-  created_at        DateTime @default(now())
-  updated_at        DateTime @updatedAt
-  // field for referencing the MongoDB document by ID
-  mongo_document_id String
-  // Define the relationship to the User who created the document.
-  author            User     @relation(fields: [author_id], references: [user_id])
-  author_id         String
+// Define the Project model for representing a collection of markdown documents
+model Project {
+  projectId         String             @id @default(cuid())
+  title             String             @db.VarChar(100)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  authorId          String
+  markdownDocuments MarkdownDocument[]
+
+  // Define the relationship to the User who created the project.
+  author User @relation(fields: [authorId], references: [userId]) // A user can have multiple projects
+
+  // define an index for faster querying
+  @@index([projectId])
+}
+
+// Define the MarkdownDocument model for representing a markdown document
+model MarkdownDocument {
+  documentId      String @id @default(cuid())
+  documentTitle   String @db.VarChar(150)
+  documentContent String
+
+  // Define relationshipo between a markdown document and the project
+  Project   Project @relation(fields: [documentId], references: [projectId]) // A project can have multiple markdown documents
+  projectId String
+
+  // define an index for faster querying
+  @@index([documentId])
 }
