@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { primaryDatabase } from '../utils/db';
 import { clerkWebhookSigningKey } from '../config/environment';
 import { Webhook } from 'svix';
 import {
@@ -13,11 +12,20 @@ export const getUser = async (req: Request, res: Response) => {
 };
 
 export const getUserById = async (req: Request, res: Response) => {
-  const user = await primaryDatabase.user.findUnique({
-    where: { user_id: req.params.id }
-  });
-  if (user == null) res.sendStatus(404);
-  res.json({ data: user });
+  res.sendStatus(200);
+};
+
+const createUser = async () => {
+  console.log('create user');
+};
+
+const updateUser = async () => {
+  console.log('update user');
+};
+
+const deleteUser = async () => {
+  console.log('delete user');
+  console.log('delete markdown documnts belowing to the user');
 };
 
 export const handleUserCrud = async (req: Request, res: Response) => {
@@ -65,6 +73,21 @@ export const handleUserCrud = async (req: Request, res: Response) => {
   // do something with evt depending on the type of the event
   console.log(`Webhook with an ID of ${id} and type of ${eventType}`);
   console.log('Webhook body:', evt.data);
+
+  // switch on evt.type
+  switch (eventType) {
+    case 'user.deleted':
+      deleteUser();
+      break;
+    case 'user.created':
+      createUser();
+      break;
+    case 'user.updated':
+      updateUser();
+      break;
+    default:
+      return new Response('Error: unrecognized event type', { status: 400 });
+  }
 
   return res.status(200).json({
     success: true,
