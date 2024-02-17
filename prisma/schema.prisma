@@ -16,8 +16,9 @@ model User {
   clerkID       String   @unique
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-  officialName  String
-  displayName   String
+  firstName     String   @db.VarChar(50)
+  lastName      String   @db.VarChar(50)
+  displayName   String   @db.VarChar(25)
   email         String   @unique
   emailVerified Boolean  @default(false)
   avatarUrl     String?
@@ -49,7 +50,7 @@ model Project {
 // Define the MarkdownDocument model for representing a markdown document
 model MarkdownDocument {
   documentId      String @id @default(cuid())
-  documentTitle   String @db.VarChar(150)
+  documentTitle   String @db.VarChar(100)
   documentContent String
 
   // Define relationshipo between a markdown document and the project
