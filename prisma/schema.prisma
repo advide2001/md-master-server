@@ -24,27 +24,11 @@ model User {
   avatarUrl     String?
 
   // Define the relationship to Project
-  projects Project[] // A user can have multiple projects.
+  projects MarkdownDocument[] // A user can have multiple projects.
 
   // Define an index for faster querying
   @@index([userId])
   @@index([clerkID])
-}
-
-// Define the Project model for representing a collection of markdown documents
-model Project {
-  projectId         String             @id @default(cuid())
-  title             String             @db.VarChar(100)
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
-  authorId          String
-  markdownDocuments MarkdownDocument[]
-
-  // Define the relationship to the User who created the project.
-  author User @relation(fields: [authorId], references: [userId]) // A user can have multiple projects
-
-  // define an index for faster querying
-  @@index([projectId])
 }
 
 // Define the MarkdownDocument model for representing a markdown document
@@ -54,7 +38,7 @@ model MarkdownDocument {
   documentContent String
 
   // Define relationshipo between a markdown document and the project
-  Project   Project @relation(fields: [documentId], references: [projectId]) // A project can have multiple markdown documents
+  Author    User   @relation(fields: [documentId], references: [userId]) // A project can have multiple markdown documents
   projectId String
 
   // define an index for faster querying
