@@ -1,3 +1,4 @@
+import { UserData } from './../models/user';
 import { Request, Response } from 'express';
 import { clerkWebhookSigningKey } from '../config/environment';
 import { Webhook } from 'svix';
@@ -6,6 +7,7 @@ import {
   UserDeletedWebhook,
   UserUpdatedWebhook
 } from '../models/user';
+import { UserCreateInput, primaryDatabase } from '../utils/db';
 
 export const getUser = async (req: Request, res: Response) => {
   res.sendStatus(200);
@@ -15,8 +17,19 @@ export const getUserById = async (req: Request, res: Response) => {
   res.sendStatus(200);
 };
 
-const createUser = async () => {
+const createUser = async (data: UserData) => {
   console.log('create user');
+
+  const user: UserCreateInput = {
+    clerkID: data.id,
+    displayName: data.username || '',
+    email: data.email_addresses[0].email_address,
+    firstName: data.first_name,
+    lastName: data.last_name || '',
+    avatarUrl: data.image_url
+  };
+  const createdUser = await primaryDatabase.user.create({ data: user });
+  return createdUser;
 };
 
 const updateUser = async () => {
@@ -73,14 +86,14 @@ export const handleUserCrud = async (req: Request, res: Response) => {
   // do something with evt depending on the type of the event
   console.log(`Webhook with an ID of ${id} and type of ${eventType}`);
   console.log('Webhook body:', evt.data);
-
+  let data;
   // switch on evt.type
   switch (eventType) {
     case 'user.deleted':
       deleteUser();
       break;
     case 'user.created':
-      createUser();
+      data = createUser(evt.data);
       break;
     case 'user.updated':
       updateUser();
@@ -89,8 +102,10 @@ export const handleUserCrud = async (req: Request, res: Response) => {
       return new Response('Error: unrecognized event type', { status: 400 });
   }
 
+  console.log(JSON.stringify(data));
   return res.status(200).json({
     success: true,
-    message: 'Webhook Recieved'
+    message: 'Webhook Recieved',
+    data: data
   });
 };
