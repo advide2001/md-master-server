@@ -18,8 +18,6 @@ export const getUserById = async (req: Request, res: Response) => {
 };
 
 const createUser = async (data: UserData) => {
-  console.log('create user');
-
   const user: UserCreateInput = {
     clerkID: data.id,
     displayName: data.username || '',
@@ -29,7 +27,6 @@ const createUser = async (data: UserData) => {
     avatarUrl: data.image_url
   };
   const createdUser = await primaryDatabase.user.create({ data: user });
-  console.log(createdUser);
   return createdUser;
 };
 
@@ -80,21 +77,14 @@ export const handleUserCrud = async (req: Request, res: Response) => {
     });
   }
 
-  // Grab the ID and TYPE of the Webhook
-  const { id } = evt.data;
   const eventType = evt.type;
-
-  // do something with evt depending on the type of the event
-  console.log(`Webhook with an ID of ${id} and type of ${eventType}`);
-  console.log('Webhook body:', evt.data);
-  let data;
   // switch on evt.type
   switch (eventType) {
     case 'user.deleted':
       deleteUser();
       break;
     case 'user.created':
-      data = createUser(evt.data);
+      createUser(evt.data);
       break;
     case 'user.updated':
       updateUser();
@@ -103,10 +93,8 @@ export const handleUserCrud = async (req: Request, res: Response) => {
       return new Response('Error: unrecognized event type', { status: 400 });
   }
 
-  console.log(JSON.stringify(data));
   return res.status(200).json({
     success: true,
-    message: 'Webhook Recieved',
-    data: data
+    message: 'Webhook Recieved'
   });
 };
