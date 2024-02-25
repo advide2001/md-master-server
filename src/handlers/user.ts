@@ -29,6 +29,7 @@ const createUser = async (data: UserData) => {
     avatarUrl: data.image_url
   };
   const createdUser = await primaryDatabase.user.create({ data: user });
+  console.log(createdUser);
   return createdUser;
 };
 
