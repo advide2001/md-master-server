@@ -26,8 +26,12 @@ const createUser = async (data: UserData) => {
     lastName: data.last_name || '',
     avatarUrl: data.image_url
   };
-  const createdUser = await primaryDatabase.user.create({ data: user });
-  return createdUser;
+  try {
+    const createdUser = await primaryDatabase.user.create({ data: user });
+    return createdUser;
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const updateUser = async () => {
