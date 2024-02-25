@@ -41,6 +41,12 @@ export interface UserData {
   web3_wallets: any[];
 }
 
+export interface DeleteUserData {
+  deleted: boolean;
+  id: string;
+  object: string;
+}
+
 export interface UserCreatedWebhook {
   data: UserData;
   object: string;
@@ -54,11 +60,7 @@ export interface UserUpdatedWebhook {
 }
 
 export interface UserDeletedWebhook {
-  data: {
-    deleted: boolean;
-    id: string;
-    object: string;
-  };
+  data: DeleteUserData;
   object: string;
   type: 'user.deleted';
 }
