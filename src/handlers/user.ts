@@ -7,7 +7,7 @@ import {
   UserDeletedWebhook,
   UserUpdatedWebhook
 } from '../models/user';
-import { UserCreateInput, primaryDatabase } from '../utils/db';
+import { UserCreateInput, UserUpdateInput, primaryDatabase } from '../utils/db';
 import { Prisma } from '@prisma/client';
 
 export const getUser = async (req: Request, res: Response) => {
@@ -37,8 +37,27 @@ const createUser = async (data: UserData) => {
   }
 };
 
-const updateUser = async () => {
+const updateUser = async (data: UserData) => {
   console.log('update user');
+
+  const user: UserUpdateInput = {
+    displayName: data.username || '',
+    firstName: data.first_name,
+    lastName: data.last_name || '',
+    avatarUrl: data.image_url
+  };
+
+  try {
+    const updatedUser = await primaryDatabase.user.update({
+      where: {
+        clerkID: data.id
+      },
+      data: user
+    });
+    return updatedUser;
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const deleteUser = async () => {
@@ -94,7 +113,7 @@ export const handleUserCrud = async (req: Request, res: Response) => {
       createUser(evt.data);
       break;
     case 'user.updated':
-      updateUser();
+      updateUser(evt.data);
       break;
     default:
       return new Response('Error: unrecognized event type', { status: 400 });
