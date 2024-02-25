@@ -8,6 +8,7 @@ import {
   UserUpdatedWebhook
 } from '../models/user';
 import { UserCreateInput, primaryDatabase } from '../utils/db';
+import { Prisma } from '@prisma/client';
 
 export const getUser = async (req: Request, res: Response) => {
   res.sendStatus(200);
@@ -30,7 +31,9 @@ const createUser = async (data: UserData) => {
     const createdUser = await primaryDatabase.user.create({ data: user });
     return createdUser;
   } catch (err) {
-    console.log(err);
+    if (err instanceof Prisma.PrismaClientKnownRequestError) {
+      if (err.code === 'P2002') console.log(err.message);
+    }
   }
 };
 
