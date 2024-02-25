@@ -1,4 +1,4 @@
-import { UserData } from './../models/user';
+import { DeleteUserData, UserData } from './../models/user';
 import { Request, Response } from 'express';
 import { clerkWebhookSigningKey } from '../config/environment';
 import { Webhook } from 'svix';
@@ -60,9 +60,18 @@ const updateUser = async (data: UserData) => {
   }
 };
 
-const deleteUser = async () => {
-  console.log('delete user');
-  console.log('delete markdown documnts belowing to the user');
+const deleteUser = async (data: DeleteUserData) => {
+  // delete or re-assign the Markdown Documents owned by the user
+  try {
+    const deletedUser = await primaryDatabase.user.delete({
+      where: {
+        clerkID: data.id
+      }
+    });
+    return deletedUser;
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export const handleUserCrud = async (req: Request, res: Response) => {
@@ -107,7 +116,7 @@ export const handleUserCrud = async (req: Request, res: Response) => {
   // switch on evt.type
   switch (eventType) {
     case 'user.deleted':
-      deleteUser();
+      deleteUser(evt.data);
       break;
     case 'user.created':
       createUser(evt.data);
