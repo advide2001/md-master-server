@@ -10,14 +10,6 @@ import {
 import { UserCreateInput, UserUpdateInput, primaryDatabase } from '../utils/db';
 import { Prisma } from '@prisma/client';
 
-export const getUser = async (req: Request, res: Response) => {
-  res.sendStatus(200);
-};
-
-export const getUserById = async (req: Request, res: Response) => {
-  res.sendStatus(200);
-};
-
 const createUser = async (data: UserData) => {
   const user: UserCreateInput = {
     clerkID: data.id,
