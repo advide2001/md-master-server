@@ -33,8 +33,10 @@ model User {
 
 // Define the MarkdownDocument model for representing a markdown document
 model MarkdownDocument {
-  documentId      String @id @default(cuid())
-  documentTitle   String @db.VarChar(100)
+  documentId      String   @id @default(cuid())
+  documentTitle   String   @db.VarChar(100)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
   documentContent String
 
   // Define relationshipo between a markdown document and the project
