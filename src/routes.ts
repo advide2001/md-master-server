@@ -5,6 +5,12 @@ import { handleUserCrud } from './handlers/user';
 import { ClerkExpressRequireAuth } from '@clerk/clerk-sdk-node';
 import { PrismaClient } from '@prisma/client';
 import bodyParser from 'body-parser';
+import {
+  createProject,
+  deleteProject,
+  getProjects,
+  updateProject
+} from './handlers/projects';
 
 function routes(app: Express) {
   // clerk webhook routes, write middlware to deny access to anyone else
@@ -13,6 +19,12 @@ function routes(app: Express) {
     bodyParser.raw({ type: 'application/json' }),
     handleUserCrud
   );
+
+  // projects routes
+  app.get('/projects', getProjects);
+  app.post('/projects', createProject);
+  app.patch('/projects', updateProject);
+  app.delete('/projects', deleteProject);
 
   // routes to check if the server is repsonding to requests.
   app.get('/servercheck', (req: Request, res: Response) => {
