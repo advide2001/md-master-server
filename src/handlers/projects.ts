@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { Prisma, PrismaClient } from '@prisma/client';
-import { CreateNewProject } from '../utils/db';
+import { Prisma } from '@prisma/client';
+import { CreateNewProject, primaryDatabase } from '../utils/db';
 
 export const getProjects = async (req: Request, res: Response) => {
   return res.status(200).json({
@@ -9,7 +9,6 @@ export const getProjects = async (req: Request, res: Response) => {
   });
 };
 export const createProject = async (req: Request, res: Response) => {
-  const primaryDatabase = new PrismaClient(); // extract this to utils/db
   const newDocument: CreateNewProject = {
     documentTitle: req.body.title,
     documentContent: req.body.content,
@@ -20,15 +19,23 @@ export const createProject = async (req: Request, res: Response) => {
     }
   };
   try {
+    primaryDatabase.$connect();
     const createdProject = await primaryDatabase.markdownDocument.create({
       data: newDocument
     });
     console.log('New Markdown Document created: ' + createdProject);
   } catch (err) {
     if (err instanceof Prisma.PrismaClientKnownRequestError) {
-      console.log(err.meta?.cause);
+      return res.status(418).json({
+        success: false,
+        message: err.meta?.casue
+      });
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: 'Something went wrong! Please try again.'
+      });
     }
-    //TODO Add return with error here
   } finally {
     await primaryDatabase.$disconnect();
   }
