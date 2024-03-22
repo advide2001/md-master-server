@@ -23,8 +23,8 @@ model User {
   emailVerified Boolean  @default(false)
   avatarUrl     String?
 
-  // Define the relationship to Project
-  projects MarkdownDocument[] // A user can have multiple projects.
+  // Define the relationship to Markdown Document
+  projects MarkdownDocument[] // A user can have multiple markdown documents.
 
   // Define an index for faster querying
   @@index([userId])
@@ -39,9 +39,9 @@ model MarkdownDocument {
   updatedAt       DateTime @updatedAt
   documentContent String
 
-  // Define relationshipo between a markdown document and the project
-  Author    User   @relation(fields: [documentId], references: [userId]) // A project can have multiple markdown documents
-  projectId String
+  // Define relationship between a markdown document and it's author
+  author   User   @relation(fields: [authorId], references: [userId]) // A user can have multiple markdown documents
+  authorId String
 
   // define an index for faster querying
   @@index([documentId])
