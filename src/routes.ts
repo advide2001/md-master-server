@@ -1,4 +1,4 @@
-import { Express, Request, Response } from 'express';
+import { Application, Request, Response } from 'express';
 import { env } from './config/environment';
 import { handleUserCrud } from './handlers/user';
 
@@ -12,7 +12,7 @@ import {
   updateProject
 } from './handlers/projects';
 
-function routes(app: Express) {
+function routes(app: Application) {
   // clerk webhook routes, write middlware to deny access to anyone else
   app.post(
     '/user',
