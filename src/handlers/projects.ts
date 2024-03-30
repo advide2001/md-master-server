@@ -3,8 +3,7 @@ import { Prisma } from '@prisma/client';
 import { CreateNewProject, primaryDatabase } from '../utils/db';
 
 export const getProjects = async (req: Request, res: Response) => {
-  const userId = 'clu2qndu20002nqzx66cuxf8d'; // TODO make this dynamic
-
+  const userId = req?.auth?.claims?.userId as string;
   try {
     primaryDatabase.$connect();
     const markdownDocuments = await primaryDatabase.markdownDocument.findMany({
@@ -41,7 +40,7 @@ export const createProject = async (req: Request, res: Response) => {
     documentContent: req.body.content,
     author: {
       connect: {
-        userId: 'clu2qndu20002nqzx66cuxf8d' // TODO make this dynamic
+        userId: req?.auth?.claims?.userId as string
       }
     }
   };
@@ -108,7 +107,7 @@ export const updateProject = async (req: Request, res: Response) => {
 };
 
 export const deleteProject = async (req: Request, res: Response) => {
-  const projectId = 'clu8gvq0j0000vhvc993w9m3d'; // TODO Make this dynamic
+  const projectId = 'clue7lak40000vhnk8unz7vof';
 
   try {
     primaryDatabase.$connect();
