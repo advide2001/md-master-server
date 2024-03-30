@@ -21,10 +21,10 @@ function routes(app: Application) {
   );
 
   // projects routes
-  app.get('/projects', getProjects);
-  app.post('/projects', createProject);
-  app.patch('/projects', updateProject);
-  app.delete('/projects', deleteProject);
+  app.get('/projects', ClerkExpressRequireAuth(), getProjects);
+  app.post('/projects', ClerkExpressRequireAuth(), createProject);
+  app.patch('/projects', ClerkExpressRequireAuth(), updateProject);
+  app.delete('/projects', ClerkExpressRequireAuth(), deleteProject);
 
   // routes to check if the server is repsonding to requests.
   app.get('/servercheck', (req: Request, res: Response) => {
