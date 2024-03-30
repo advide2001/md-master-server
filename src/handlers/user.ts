@@ -12,7 +12,7 @@ import { Prisma } from '@prisma/client';
 
 const createUser = async (data: UserData) => {
   const user: UserCreateInput = {
-    clerkID: data.id,
+    userId: data.id,
     displayName: data.username || '',
     email: data.email_addresses[0].email_address,
     firstName: data.first_name,
@@ -28,7 +28,7 @@ const createUser = async (data: UserData) => {
     }
   }
 };
-
+// TODO Refactor this!!
 const updateUser = async (data: UserData) => {
   console.log('update user');
 
@@ -42,7 +42,7 @@ const updateUser = async (data: UserData) => {
   try {
     const updatedUser = await primaryDatabase.user.update({
       where: {
-        clerkID: data.id
+        userId: data.id
       },
       data: user
     });
@@ -57,7 +57,7 @@ const deleteUser = async (data: DeleteUserData) => {
   try {
     const deletedUser = await primaryDatabase.user.delete({
       where: {
-        clerkID: data.id
+        userId: data.id
       }
     });
     return deletedUser;
