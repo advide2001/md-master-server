@@ -142,6 +142,13 @@ export const updateProject = async (req: Request, res: Response) => {
       }
     });
 
+    if (!markdownDocument) {
+      return res.status(404).json({
+        success: false,
+        message: 'Document not found'
+      });
+    }
+
     if (markdownDocument && markdownDocument.authorId === tokenUserId) {
       markdownDocument = await primaryDatabase.markdownDocument.update({
         where: {
